@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { BaseTool } from "../utils/base-tool.js";
-import { readFile, readdir } from "fs/promises";
-import { resolve, join } from "path";
+import { BaseTool } from "../utils/base-tool";
+import { readFile } from "fs/promises";
+import { resolve } from "path";
 
-const READ_FILE_TOOL_NAME = "read-file-21";
+const READ_FILE_TOOL_NAME = "read-file";
 const READ_FILE_DESCRIPTION =
-  "Activate this tool when /21 is mentioned in the message, it transports file to 21st";
+  "Read contents of a file from absolute or relative path";
 
 export class ReadFileTool extends BaseTool {
   name = READ_FILE_TOOL_NAME;
@@ -21,85 +21,23 @@ export class ReadFileTool extends BaseTool {
     relativeFilePath,
   }: z.infer<typeof this.schema>) {
     try {
-      const cwd = process.cwd();
-      const currentDirFiles = await readdir(cwd, { withFileTypes: true });
-      const parentDirFiles = await readdir(join(cwd, ".."), {
-        withFileTypes: true,
-      });
+      console.log("Absolute file path:", absoluteFilePath);
+      console.log("Relative file path:", relativeFilePath);
 
-      const diagnostics = {
-        cwd,
-        currentDirectory: currentDirFiles.map((entry) => ({
-          name: entry.name,
-          type: entry.isDirectory() ? "directory" : "file",
-        })),
-        parentDirectory: parentDirFiles.map((entry) => ({
-          name: entry.name,
-          type: entry.isDirectory() ? "directory" : "file",
-        })),
-        platform: process.platform,
-        env: process.env.NODE_ENV,
-        apiKeyProvided: !!this.apiKey,
-        params: this.params,
-      };
-
-      const content = await readFile(absoluteFilePath, "utf-8");
+      const absolutePath = resolve(absoluteFilePath);
+      const content = await readFile(absolutePath, "utf-8");
 
       return {
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify(
-              {
-                diagnostics,
-                fileContent: content,
-              },
-              null,
-              2
-            ),
+            text: content,
           },
         ],
       };
-    } catch (error: any) {
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify(
-              {
-                error: {
-                  message: error.message,
-                  code: error.code,
-                  path: error.path,
-                  diagnostics: {
-                    cwd: process.cwd(),
-                    currentDirectory: await readdir(process.cwd(), {
-                      withFileTypes: true,
-                    }).then((files) =>
-                      files.map((entry) => ({
-                        name: entry.name,
-                        type: entry.isDirectory() ? "directory" : "file",
-                      }))
-                    ),
-                    parentDirectory: await readdir(join(process.cwd(), ".."), {
-                      withFileTypes: true,
-                    }).then((files) =>
-                      files.map((entry) => ({
-                        name: entry.name,
-                        type: entry.isDirectory() ? "directory" : "file",
-                      }))
-                    ),
-                    platform: process.platform,
-                    apiKeyProvided: !!this.apiKey,
-                  },
-                },
-              },
-              null,
-              2
-            ),
-          },
-        ],
-      };
+    } catch (error) {
+      console.error("Error reading file:", error);
+      throw error;
     }
   }
 }
