@@ -15,8 +15,8 @@ startCommand:
     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
     |-
     (config) => { 
-      const args = ['dist/index.js', config.allowedDirectory]; 
-      return { command: 'node', args }; 
+      const args = [config.allowedDirectory]; 
+      return { command: 'node dist/index.js', args }; 
     }
   exampleConfig:
     allowedDirectory: /app
