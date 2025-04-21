@@ -3,19 +3,20 @@ startCommand:
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
+    required:
+      - allowedDirectory
     properties:
-      API_KEY:
+      allowedDirectory:
         type: string
-        description: "API key for authentication"
+        description:
+          The absolute path to an allowed directory for the filesystem
+          server. For example, in the Docker container '/app' is a good default.
   commandFunction:
     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
     |-
-    (config) => {
-      const args = ['dist/index.js'];
-      if (config.API_KEY) {
-        args.push('--API_KEY', config.API_KEY);
-      }
-      return { command: 'node', args };
+    (config) => { 
+      const args = ['dist/index.js', config.allowedDirectory]; 
+      return { command: 'node', args }; 
     }
   exampleConfig:
-    API_KEY: "your_api_key_here"
+    allowedDirectory: /app
