@@ -5,6 +5,12 @@ export abstract class BaseTool {
   abstract name: string;
   abstract description: string;
   abstract schema: z.ZodObject<any>;
+  protected apiKey?: string;
+  protected params?: Record<string, string>;
+  constructor(apiKey?: string, params?: Record<string, string>) {
+    this.apiKey = apiKey;
+    this.params = params;
+  }
 
   register(server: McpServer) {
     server.tool(
