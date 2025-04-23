@@ -2,10 +2,8 @@
 
 startCommand:
   type: stdio
-  configSchema:
-    # JSON Schema defining the configuration options for the MCP.
-    {}
+  configSchema: {}
   commandFunction:
     # A function that produces the CLI command to start the MCP on stdio.
     |-
-    (config) => ({ command: 'npx', args: ['ts-node','src/index.ts'] })
+    (config) => ({ command: 'node', args: ['dist/index.js'] })
