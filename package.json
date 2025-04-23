@@ -1,6 +1,6 @@
 {
   "name": "@xoy8n/read-file-test",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "File System MCP Server",
   "type": "module",
   "main": "dist/index.js",
