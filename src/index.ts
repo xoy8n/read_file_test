@@ -29,7 +29,7 @@ console.log("API_KEY", API_KEY);
 
 console.log("Starting MCP server...");
 const server = new McpServer({
-  name: "fs-mcp",
+  name: "read-file-test",
   version: "0.0.2",
 });
 
