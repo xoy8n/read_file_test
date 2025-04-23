@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseTool } from "../utils/base-tool";
+import { BaseTool } from "../utils/base-tool.js";
 import { readFile, readdir } from "fs/promises";
 import { resolve, join } from "path";
 
