@@ -23,11 +23,6 @@ function parseArgs() {
 
 const params = parseArgs();
 const API_KEY = params.API_KEY || process.env.API_KEY;
-
-console.log("PARAMS", params);
-console.log("API_KEY", API_KEY);
-
-console.log("Starting MCP server...");
 const server = new McpServer({
   name: "read-file-test",
   version: "0.0.2",
