@@ -2,7 +2,7 @@
 
 startCommand:
   type: stdio
-  configSchema:
+  configSchema: {}
   commandFunction:
     # A function that produces the CLI command to start the MCP on stdio.
     |-
